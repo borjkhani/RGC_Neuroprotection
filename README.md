@@ -156,6 +156,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## Acknowledgments
+
+We thank the International Centre for Translational Eye Research (ICTER) for computational resources and support.
+
+---
+
 ## Contact
 
 **Mehdi Borjkhani**  
