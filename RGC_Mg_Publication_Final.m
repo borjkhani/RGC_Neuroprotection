@@ -16,8 +16,8 @@
 %    • At 80 Hz: spike loss plateaus at 20% for [Mg²⁺] = 1.6-2.0 mM
 %    • Optimal therapeutic window at 80 Hz: 1.6-2.0 mM
 %
-%  Author: Mehdi Zarei
-%  Institution: ICTER / Nencki Institute, Polish Academy of Sciences
+%  Author: Mehdi Borjkhani
+%  Institution: ICTER, Polish Academy of Sciences
 %  =========================================================================
 
 clear; clc; close all;

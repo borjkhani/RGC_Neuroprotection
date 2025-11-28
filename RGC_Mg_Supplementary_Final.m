@@ -5,8 +5,8 @@
 %  Figure S1: High-Resolution Therapeutic Window (80 Hz)
 %  Figure S2: Detailed Results Tables
 %
-%  Author: Mehdi Zarei
-%  Institution: ICTER / Nencki Institute, Polish Academy of Sciences
+%  Author: Mehdi Borjkhani
+%  Institution: ICTER, Polish Academy of Sciences
 %  =========================================================================
 
 clear; clc; close all;
@@ -149,7 +149,7 @@ sgtitle('Figure S1: High-Resolution Analysis (80 Hz)', 'FontSize', 12, 'FontWeig
 %% =========================================================================
 %  FIGURE S2: RESULTS TABLE
 %  =========================================================================
-figS2 = figure('Position', [100 100 700 450], 'Color', 'w');
+figS2 = figure('Position', [100 100 700 550], 'Color', 'w');
 
 axis off;
 
@@ -158,22 +158,27 @@ text(0.5, 0.95, 'High-Resolution Results at 80 Hz', 'FontSize', 12, 'FontWeight'
     'HorizontalAlignment', 'center');
 
 % Table header
-text(0.10, 0.85, '[Mg²⁺]', 'FontSize', 9, 'FontWeight', 'bold');
-text(0.25, 0.85, 'Spikes', 'FontSize', 9, 'FontWeight', 'bold');
-text(0.40, 0.85, 'Loss (%)', 'FontSize', 9, 'FontWeight', 'bold');
-text(0.55, 0.85, 'Peak Ca', 'FontSize', 9, 'FontWeight', 'bold');
-text(0.70, 0.85, 'Ca OK?', 'FontSize', 9, 'FontWeight', 'bold');
-text(0.85, 0.85, 'Optimal', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.10, 0.88, '[Mg²⁺]', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.25, 0.88, 'Spikes', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.40, 0.88, 'Loss (%)', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.55, 0.88, 'Peak Ca', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.70, 0.88, 'Ca OK?', 'FontSize', 9, 'FontWeight', 'bold');
+text(0.85, 0.88, 'Optimal', 'FontSize', 9, 'FontWeight', 'bold');
 
-% Table data
+% Draw header line
+line([0.05 0.95], [0.86 0.86], 'Color', 'k', 'LineWidth', 1);
+
+% Table data - reduced spacing to fit all rows above the summary
+row_spacing = 0.042;
+start_y = 0.82;
+
 for m = 1:n_Mg_hr
-    y = 0.80 - m*0.045;
+    y = start_y - (m-1)*row_spacing;
     
-    % Color row if optimal
+    % Highlight optimal rows with background
     if optimal(m)
-        rowcolor = [0.9 0.95 0.9];
-    else
-        rowcolor = [1 1 1];
+        rectangle('Position', [0.05, y-0.015, 0.9, 0.035], ...
+            'FaceColor', [0.9 0.95 0.9], 'EdgeColor', 'none');
     end
     
     text(0.10, y, sprintf('%.1f mM', Mg_highres(m)), 'FontSize', 8);
@@ -182,12 +187,10 @@ for m = 1:n_Mg_hr
     
     if ca_safe(m)
         ca_color = [0.2 0.6 0.2];
-        ca_str = sprintf('%.2f', hr_results.peak_Ca(m));
     else
         ca_color = [0.8 0.2 0.2];
-        ca_str = sprintf('%.2f', hr_results.peak_Ca(m));
     end
-    text(0.55, y, ca_str, 'FontSize', 8, 'Color', ca_color, 'HorizontalAlignment', 'center');
+    text(0.55, y, sprintf('%.2f', hr_results.peak_Ca(m)), 'FontSize', 8, 'Color', ca_color, 'HorizontalAlignment', 'center');
     
     if ca_safe(m)
         text(0.70, y, 'YES', 'FontSize', 8, 'Color', [0.2 0.6 0.2], 'HorizontalAlignment', 'center');
@@ -200,9 +203,12 @@ for m = 1:n_Mg_hr
     end
 end
 
-% Summary at bottom
+% Draw bottom line above summary
+line([0.05 0.95], [0.12 0.12], 'Color', 'k', 'LineWidth', 1);
+
+% Summary at bottom - well separated from data
 if ~isempty(opt_idx)
-    text(0.5, 0.08, sprintf('OPTIMAL RANGE: %.1f – %.1f mM', Mg_highres(opt_idx(1)), Mg_highres(opt_idx(end))), ...
+    text(0.5, 0.07, sprintf('OPTIMAL RANGE: %.1f – %.1f mM', Mg_highres(opt_idx(1)), Mg_highres(opt_idx(end))), ...
         'FontSize', 11, 'FontWeight', 'bold', 'Color', [0.2 0.5 0.2], 'HorizontalAlignment', 'center');
 end
 
@@ -250,15 +256,26 @@ end
 %  FUNCTIONS
 %  =========================================================================
 function save_figure(fig, filename)
-    saveas(fig, [filename '.png']);
+    % Save PNG
+    try
+        saveas(fig, [filename '.png']);
+        fprintf('  Saved: %s.png\n', filename);
+    catch ME
+        warning('Could not save PNG: %s', ME.message);
+    end
     
-    set(fig, 'PaperPositionMode', 'auto');
-    fig_pos = fig.Position;
-    set(fig, 'PaperUnits', 'points');
-    set(fig, 'PaperSize', [fig_pos(3) fig_pos(4)]);
-    print(fig, [filename '.pdf'], '-dpdf', '-vector');
-    
-    fprintf('  Saved: %s.png, %s.pdf\n', filename, filename);
+    % Save PDF with error handling
+    try
+        set(fig, 'PaperPositionMode', 'auto');
+        fig_pos = fig.Position;
+        set(fig, 'PaperUnits', 'points');
+        set(fig, 'PaperSize', [fig_pos(3) fig_pos(4)]);
+        print(fig, [filename '.pdf'], '-dpdf', '-vector');
+        fprintf('  Saved: %s.pdf\n', filename);
+    catch ME
+        warning('Could not save PDF (file may be open or folder write-protected): %s', ME.message);
+        fprintf('  PDF not saved - try closing the file if open, or save to a different folder.\n');
+    end
 end
 
 function [V, Ca] = run_sim(t, dt, Glu, Mg_ext, p)
