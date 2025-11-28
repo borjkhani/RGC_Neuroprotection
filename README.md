@@ -1,13 +1,5 @@
 # RGC_Neuroprotection
 
-# RGC_Neuroprotection
-
-## Magnesium Neuroprotection in Retinal Ganglion Cells: A Computational Study
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![MATLAB](https://img.shields.io/badge/MATLAB-R2023b-blue.svg)](https://www.mathworks.com/products/matlab.html)
-# RGC_Neuroprotection
-
 ## Magnesium Neuroprotection in Retinal Ganglion Cells: A Computational Study
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -158,14 +150,6 @@ If you use this code in your research, please cite:
 
 ---
 
-## Related Publications
-
-- Borjkhani M, Bahrami F, Janahmadi M. (2018). Computational modeling of opioid-induced synaptic plasticity in hippocampus. *PLoS ONE*, 13(3):e0193410.
-- Borjkhani M, Bahrami F, Janahmadi M. (2018). Assessing the effects of opioids on pathological memory by a computational model. *Basic and Clinical Neuroscience*, 9(4):275-288.
-- Borjkhani M, Borjkhani H, Sharif MA. (2022). Investigating the cocaine-induced reduction of potassium current on the generation of action potentials using a computational model. *Basic and Clinical Neuroscience*, 13(6):765-774.
-
----
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -174,18 +158,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-**Mehdi Borjkhani, PhD**  
+**Mehdi Borjkhani**  
 International Centre for Translational Eye Research (ICTER)  
 Institute of Physical Chemistry, Polish Academy of Sciences  
 Warsaw, Poland
 
 📧 Email: mborjkhani@ichf.edu.pl
-
----
-
-## Acknowledgments
-
-We gratefully acknowledge Professor Maciej Wojtkowski, Head of ICTER, for his support and for providing an inspiring research environment.
 
 ---
 
