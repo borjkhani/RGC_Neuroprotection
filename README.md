@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2020b+-blue.svg)](https://www.mathworks.com/products/matlab.html)
+[![Status](https://img.shields.io/badge/Status-Under%20Review-orange.svg)]()
 
 This repository contains the MATLAB code for investigating magnesium (Mg²⁺)-mediated neuroprotection in retinal ganglion cells (RGCs) during glutamatergic excitotoxicity, as described in our manuscript submitted to PLOS ONE.
 
@@ -15,10 +16,12 @@ Retinal ganglion cells are vulnerable to excitotoxic damage in conditions such a
 
 ### Key Findings
 
-- **Frequency-dependent therapeutic windows**: The effective Mg²⁺ range narrows from 2.0 mM width at physiological frequencies to 0.4 mM at excitotoxic frequencies (80 Hz)
-- **Optimal therapeutic range**: 1.6–2.0 mM at 80 Hz satisfies both neuroprotection (Ca²⁺ < 1.0 μM) and function preservation (spike loss ≤20%)
-- **Spike loss plateau**: An "optimal zone" where spike reduction plateaus at 20% while calcium reduction continues
-- **Critical timing**: Mg²⁺ must be applied within 0.5 seconds of stress onset for meaningful protection
+- **Frequency-dependent therapeutic windows**: The effective Mg²⁺ range narrows from 2.0 mM width at physiological frequencies (10 Hz) to 0.4 mM at excitotoxic frequencies (80 Hz), closing entirely at 90–100 Hz
+- **Optimal therapeutic range**: 1.6–2.0 mM at 80 Hz satisfies both neuroprotection (Ca²⁺ < 1.0 μM) and function preservation (spike loss ≤ 20%)
+- **Spike loss plateau**: An optimal zone where spike reduction plateaus at 20% while calcium reduction continues to improve (1.4–2.0 mM)
+- **Critical timing**: Protection efficacy is maximal with pre-treatment or immediate intervention (100%), declines steeply with delay (> 50% protection requires intervention within 0.2 s in the model protocol), reflecting relative phase sensitivity rather than a literal clinical deadline
+- **State-based threshold**: ≥ 50% protection requires intervention before ~35% of peak Ca²⁺ accumulation, generalizing the timing result across timescales
+- **Numerical validation**: Forward Euler at dt = 0.02 ms agrees with RK4 to < 0.2% in peak Ca²⁺
 
 ---
 
@@ -30,9 +33,13 @@ RGC_Neuroprotection/
 ├── README.md                         # This file
 ├── LICENSE                           # MIT License
 │
-├── RGC_Mg_Publication_Final.m        # Main analysis script (generates Figures 1-5)
-└── RGC_Mg_Supplementary_Final.m      # Supplementary analyses (generates Figures S1-S2)
+└── RGC_Mg_Revised.m                  # Main analysis script — generates all
+                                      # main figures (1–5) and supplementary
+                                      # figures (S1–S5), including revised
+                                      # analyses addressing reviewer comments
 ```
+
+> **Note**: This revised version consolidates the main and supplementary analyses into a single script for reproducibility, and adds four new analyses (extended frequency range, Ca²⁺ threshold sensitivity, numerical method validation, expanded parameter table) requested during peer review.
 
 ---
 
@@ -41,6 +48,7 @@ RGC_Neuroprotection/
 The model implements a biophysically detailed, conductance-based RGC with:
 
 ### Intrinsic Conductances
+
 | Channel | Conductance | Description |
 |---------|-------------|-------------|
 | Na⁺ | g_Na = 120 mS/cm² | Fast sodium (spike generation) |
@@ -51,17 +59,25 @@ The model implements a biophysically detailed, conductance-based RGC with:
 | Leak | g_L = 0.35 mS/cm² | Leak conductance |
 
 ### Synaptic Receptors
+
 | Receptor | Parameters | Description |
 |----------|------------|-------------|
 | AMPA | τ_rise = 0.3 ms, τ_decay = 3 ms | Fast glutamatergic transmission |
 | NMDA | τ_rise = 5 ms, τ_decay = 80 ms | Slow, Mg²⁺-sensitive transmission |
 
 ### Mg²⁺ Block
-Voltage-dependent block following Jahr-Stevens formulation:
+Voltage-dependent block following the Jahr–Stevens formulation:
 ```
-B(V) = 1 / (1 + η·[Mg²⁺]·exp(-γ·V))
+B(V) = 1 / (1 + η · [Mg²⁺] · exp(−γ · V))
 ```
 where η = 0.28 mM⁻¹ and γ = 0.062 mV⁻¹
+
+### Calcium Dynamics
+Intracellular calcium evolves via:
+```
+d[Ca²⁺]ᵢ/dt = −k_NMDA · f_Ca · I_NMDA − k_CaL · I_CaL − ([Ca²⁺]ᵢ − [Ca²⁺]_rest) / τ_Ca
+```
+with τ_Ca = 200 ms, f_Ca = 0.15, [Ca²⁺]_rest = 0.05 μM.
 
 ---
 
@@ -71,51 +87,48 @@ where η = 0.28 mM⁻¹ and γ = 0.062 mV⁻¹
 - MATLAB R2020b or later
 - No additional toolboxes required
 
-### Running the Main Analysis
+### Running the Analysis
 
 ```matlab
-% Generate all main figures (Figures 1-5)
-run('RGC_Mg_Publication_Final.m')
+% Generate all main and supplementary figures
+run('RGC_Mg_Revised.m')
 ```
 
-This script performs:
-1. Dose-response simulations across Mg²⁺ concentrations (0.2–2.5 mM)
-2. Frequency analysis (10, 30, 60, 80 Hz)
-3. Therapeutic window identification
-4. Intervention timing analysis
-5. Automatic figure generation and saving
+The script runs five sequential analyses:
 
-### Running Supplementary Analyses
+1. **Main dose-response simulations** — Mg²⁺ × frequency grid (8 × 6 = 48 conditions)
+2. **Intervention timing analysis** — 12 delay conditions at 80 Hz
+3. **High-resolution analysis at 80 Hz** — 0.1 mM steps from 1.0 to 2.5 mM
+4. **Ca²⁺ toxicity threshold sensitivity** — 17 threshold values (0.6–1.4 μM in 0.05 μM steps)
+5. **Numerical method validation** — Forward Euler (4 step sizes) vs. RK4
 
-```matlab
-% Generate supplementary figures (Figures S1-S2)
-run('RGC_Mg_Supplementary_Final.m')
-```
-
-This script performs:
-1. High-resolution analysis at 80 Hz (0.1 mM steps from 1.0–2.5 mM)
-2. Detailed results tables
+Estimated runtime: ~5–15 minutes depending on hardware.
 
 ---
 
 ## Output Files
 
-Running the scripts generates the following figures:
+Running the script generates the following figures (saved as `.tif` at 600 DPI, `.pdf` vector, and `.png` preview):
 
 ### Main Figures
+
 | Figure | Filename | Description |
 |--------|----------|-------------|
-| Figure 1 | `Figure1_ModelOverview.png/.pdf` | Model schematic and example traces |
-| Figure 2 | `Figure2_DoseResponse.png/.pdf` | Dose-response curves |
-| Figure 3 | `Figure3_TherapeuticWindows.png/.pdf` | Frequency-dependent therapeutic windows |
-| Figure 4 | `Figure4_InterventionTiming.png/.pdf` | Timing analysis |
-| Figure 5 | `Figure5_Mechanism.png/.pdf` | Mechanistic demonstration |
+| Figure 1 | `Figure1_ModelOverview` | Model schematic, Mg²⁺ block curve, voltage and Ca²⁺ traces |
+| Figure 2 | `Figure2_DoseResponse` | Dose-response curves across 10–100 Hz (functional cost & neuroprotection) |
+| Figure 3 | `Figure3_TherapeuticWindows` | Trade-off space at 80 Hz; window width vs. frequency |
+| Figure 4 | `Figure4_InterventionTiming` | Ca²⁺ dynamics and protection efficacy vs. intervention delay |
+| Figure 5 | `Figure5_Mechanism` | Mechanistic cascade: B(V), NMDA/AMPA currents, Ca²⁺ reduction |
 
 ### Supplementary Figures
+
 | Figure | Filename | Description |
 |--------|----------|-------------|
-| Figure S1 | `FigureS1_HighResolution.png/.pdf` | High-resolution analysis at 80 Hz |
-| Figure S2 | `FigureS2_ResultsTable.png/.pdf` | Detailed numerical results |
+| Figure S1 | `FigureS1_HighResolution` | High-resolution dose-response and trade-off space at 80 Hz |
+| Figure S2 | `FigureS2_ResultsTable` | Detailed numerical results table at 80 Hz (0.1 mM resolution) |
+| Figure S3 | `FigureS3_ThresholdSensitivity` | Ca²⁺ toxicity threshold sensitivity analysis (0.6–1.4 μM) |
+| Figure S4 | `FigureS4_NumericalValidation` | Euler convergence and RK4 agreement |
+| Figure S5 | `FigureS5_ExpandedParameters` | Complete model parameter table with references |
 
 ---
 
@@ -123,13 +136,49 @@ Running the scripts generates the following figures:
 
 | Parameter | Value | Unit | Description |
 |-----------|-------|------|-------------|
-| `Mg_levels` | 0.2–2.5 | mM | Extracellular Mg²⁺ concentrations |
-| `frequencies` | 10, 30, 60, 80 | Hz | Stimulation frequencies |
-| `Ca_toxic` | 1.0 | μM | Calcium toxicity threshold |
+| `Mg_levels` | 0.2, 0.5, 1.0, 1.4, 1.6, 1.8, 2.0, 2.5 | mM | Coarse Mg²⁺ sweep |
+| `Mg_highres` | 1.0 : 0.1 : 2.5 | mM | High-resolution Mg²⁺ sweep |
+| `frequencies` | 10, 30, 60, 80, 90, 100 | Hz | Stimulation frequencies |
+| `Ca_toxic` | 1.0 | μM | Default Ca²⁺ toxicity threshold |
+| `Ca_thresholds` | 0.6 : 0.05 : 1.4 | μM | Sensitivity analysis range |
 | `max_spike_loss` | 20 | % | Maximum acceptable spike reduction |
-| `Tmax` | 3000 | ms | Simulation duration |
+| `Tmax` | 3000 | ms | Simulation duration (main) |
 | `dt` | 0.02 | ms | Integration time step |
-| `transient` | 500 | ms | Initial transient to discard |
+| `transient` | 500 | ms | Initial transient discarded from analysis |
+
+### Simulation Protocol Details
+
+- **Spike counting window**: T_count = 2500 ms (t = 500–3000 ms)
+- **At 80 Hz**: N_pulses = 200 expected pulses in the analysis window
+- **Spike loss**: 100 × (1 − N_spikes / N_pulses) — relative to expected pulses, not baseline Mg²⁺
+- **Intervention timing**: Stress window t = 0.5–4.5 s (4 s duration), total simulation 6 s
+
+---
+
+## Helper Functions
+
+The script contains four internal simulation functions:
+
+| Function | Description |
+|----------|-------------|
+| `run_simulation_euler` | Forward Euler integration (main workhorse) |
+| `run_simulation_rk4` | 4th-order Runge-Kutta (used for numerical validation only) |
+| `run_simulation_detailed` | Euler with full current and Mg²⁺ block recording (Figure 5/6) |
+| `derivatives` | State-derivative function called by the RK4 integrator |
+| `save_figure` | Saves each figure as TIFF (600 DPI), PDF (vector), and PNG (300 DPI) |
+
+---
+
+## Therapeutic Window Summary
+
+| Frequency | Optimal [Mg²⁺] Range | Window Width |
+|-----------|----------------------|--------------|
+| 10 Hz | 0.5–2.5 mM | 2.0 mM |
+| 30 Hz | 1.0–2.5 mM | 1.5 mM |
+| 60 Hz | 1.4–2.5 mM | 1.1 mM |
+| 80 Hz | 1.6–2.0 mM | 0.4 mM |
+| 90 Hz | None | — |
+| 100 Hz | None | — |
 
 ---
 
@@ -139,12 +188,12 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @article{Borjkhani2025,
-  title={Magnesium neuroprotection in retinal ganglion cells: A computational 
-         study of frequency-dependent therapeutic windows and intervention timing},
-  author={Borjkhani, Mehdi and Borjkhani, Hadi and Sharif, Morteza A.},
-  journal={PLOS ONE},
-  year={2025},
-  note={Under review}
+  title   = {Magnesium neuroprotection in retinal ganglion cells: A computational
+             study of frequency-dependent therapeutic windows and intervention timing},
+  author  = {Borjkhani, Mehdi and Borjkhani, Hadi and Sharif, Morteza A.},
+  journal = {PLOS ONE},
+  year    = {2025},
+  note    = {Under review}
 }
 ```
 
@@ -152,13 +201,7 @@ If you use this code in your research, please cite:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-We thank the International Centre for Translational Eye Research (ICTER) for computational resources and support.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -169,8 +212,9 @@ International Centre for Translational Eye Research (ICTER)
 Institute of Physical Chemistry, Polish Academy of Sciences  
 Warsaw, Poland
 
-📧 Email: mborjkhani@ichf.edu.pl
+📧 mborjkhani@ichf.edu.pl  
+🔗 [GitHub](https://github.com/borjkhani)
 
 ---
 
-*Last updated: November 2025*
+*Last updated: March 2026*
