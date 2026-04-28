@@ -6,7 +6,7 @@
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2020b+-blue.svg)](https://www.mathworks.com/products/matlab.html)
 [![Status](https://img.shields.io/badge/Status-Under%20Review-orange.svg)]()
 
-This repository contains the MATLAB code for investigating magnesium (Mg²⁺)-mediated neuroprotection in retinal ganglion cells (RGCs) during glutamatergic excitotoxicity, as described in our manuscript submitted to PLOS ONE.
+This repository contains the MATLAB code for investigating magnesium (Mg²⁺)-mediated neuroprotection in retinal ganglion cells (RGCs) during glutamatergic excitotoxicity, as described in our manuscript accepted for publication in PLOS ONE.
 
 ---
 
@@ -186,14 +186,16 @@ The script contains four internal simulation functions:
 
 If you use this code in your research, please cite:
 
+
+
 ```bibtex
-@article{Borjkhani2025,
+@article{Borjkhani2026,
   title   = {Magnesium neuroprotection in retinal ganglion cells: A computational
              study of frequency-dependent therapeutic windows and intervention timing},
   author  = {Borjkhani, Mehdi and Borjkhani, Hadi and Sharif, Morteza A.},
   journal = {PLOS ONE},
-  year    = {2025},
-  note    = {Under review}
+  year    = {2026},
+  note    = {Accepted}
 }
 ```
 
