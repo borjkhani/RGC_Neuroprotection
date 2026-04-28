@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2020b+-blue.svg)](https://www.mathworks.com/products/matlab.html)
 [![Status](https://img.shields.io/badge/Status-Accepted-brightgreen.svg)]()
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19846309.svg)](https://doi.org/10.5281/zenodo.19846309)
+
 
 This repository contains the MATLAB code for investigating magnesium (Mg²⁺)-mediated neuroprotection in retinal ganglion cells (RGCs) during glutamatergic excitotoxicity, as described in our manuscript accepted for publication in PLOS ONE.
 
@@ -180,6 +182,16 @@ The script contains four internal simulation functions:
 | 100 Hz | None | — |
 
 ---
+
+---
+
+## Data Availability
+
+All simulation code, analysis scripts, and minimal data required to reproduce the manuscript figures and results are included in this repository.
+
+Permanent Zenodo archive: https://doi.org/10.5281/zenodo.19846309
+
+Published article DOI: https://doi.org/10.1371/journal.pone.0348068
 
 ## Citation
 
