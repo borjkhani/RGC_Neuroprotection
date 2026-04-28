@@ -1,14 +1,7 @@
 %% =========================================================================
 %  Mg²⁺ NEUROPROTECTION IN RETINAL GANGLION CELLS
-%  REVISED VERSION - Addressing Reviewer Comments
+%  
 %  =========================================================================
-%
-%  REVISIONS MADE:
-%    1. Sensitivity analysis for Ca²⁺ toxicity threshold (0.8, 1.0, 1.2 µM)
-%    2. Numerical method validation (Euler vs RK4, dt comparison)
-%    3. Improved figure labeling with larger fonts
-%    4. Expanded parameter table as figure
-%    5. Consistent terminology ("high-frequency pathological stimulation")
 %
 %  FIGURES GENERATED:
 %    Figure 1: Model Overview & Example Traces
