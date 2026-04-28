@@ -183,8 +183,6 @@ The script contains four internal simulation functions:
 
 ---
 
----
-
 ## Data Availability
 
 All simulation code, analysis scripts, and minimal data required to reproduce the manuscript figures and results are included in this repository.
@@ -193,11 +191,10 @@ Permanent Zenodo archive: https://doi.org/10.5281/zenodo.19846309
 
 Published article DOI: https://doi.org/10.1371/journal.pone.0348068
 
+
 ## Citation
 
-If you use this code in your research, please cite:
-
-
+If you use this code or model in your research, please cite:
 
 ```bibtex
 @article{Borjkhani2026,
@@ -206,8 +203,9 @@ If you use this code in your research, please cite:
   author  = {Borjkhani, Mehdi and Borjkhani, Hadi and Sharif, Morteza A.},
   journal = {PLOS ONE},
   year    = {2026},
-  note    = {Accepted}
+  doi     = {10.1371/journal.pone.0348068}
 }
+
 ```
 
 ---
