@@ -9,7 +9,6 @@
 This repository contains the MATLAB code for investigating magnesium (Mg²⁺)-mediated neuroprotection in retinal ganglion cells (RGCs) during glutamatergic excitotoxicity, as described in our manuscript accepted for publication in PLOS ONE.
 
 ---
-
 ## Overview
 
 Retinal ganglion cells are vulnerable to excitotoxic damage in conditions such as glaucoma and retinal ischemia. This computational study systematically investigates how extracellular Mg²⁺ concentration and intervention timing affect neuroprotection through voltage-dependent NMDA receptor block.
